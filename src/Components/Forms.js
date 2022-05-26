@@ -5,7 +5,7 @@ import Input from "../Styles/Input";
 import Button from "../Styles/Button";
 
 
-export default function Forms({children,isSignUp,formData, setFormData, doLogin, doSignUp, isDisabled, handleForm}){
+export default function Forms({children,formData, submitFunction, isDisabled, handleForm}){
 
   
 
@@ -18,7 +18,7 @@ export default function Forms({children,isSignUp,formData, setFormData, doLogin,
     }
 
     return (
-        <FormStyle onSubmit={isSignUp ? doSignUp : doLogin  }>
+        <FormStyle onSubmit={submitFunction}>
             <Input type="email" name="email" onChange={handleForm} placeholder="email" value={formData.email} disabled={isDisabled} isDisabled={isDisabled} required/>
             <Input type="password" name="password" onChange={handleForm} placeholder="senha" value={formData.password} disabled={isDisabled} isDisabled={isDisabled} required/>
             {children}

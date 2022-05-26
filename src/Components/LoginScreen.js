@@ -4,11 +4,26 @@ import UserConfigStyle from "./UserConfigStyle";
 import Forms from "./Forms";
 
 
-export default function LoginScreen({formData, setFormData, doLogin, doSignUp, isDisabled,handleForm}){
+export default function LoginScreen({formData, setFormData, isDisabled, handleForm, setIsDisabled}){
+
+    function doLogin(e){
+        e.preventDefault();
+        setIsDisabled(true);
+        console.log(formData);
+        setFormData({
+            ...formData,
+            email: "",
+            password: "",
+          }); 
+
+        alert("login okay");
+        
+        //promise.catch(error=>FailedRequest(error));
+    }
 
     return(
         <UserConfigStyle>
-            <Forms formData={formData} setFormData={setFormData} doLogin={doLogin} doSignUp={doSignUp} isSignUp={false} isDisabled={isDisabled} handleForm={handleForm}/>
+            <Forms formData={formData} setFormData={setFormData} submitFunction={doLogin} isDisabled={isDisabled} handleForm={handleForm}/>
             <Link to="/cadastro" >
                 <SignUpLink>Não tem uma conta? Cadastre-se!</SignUpLink>
             </Link>
