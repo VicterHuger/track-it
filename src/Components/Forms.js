@@ -1,10 +1,11 @@
 import styled from "styled-components";
 
-export default function Forms({children}){
+export default function Forms({children,isSignUp,email,setEmail,password,setPassword,doLogin,doSignUp}){
+
     return (
-        <FormStyle onSubmit={(e)=>e.preventDefault()}>
-            <input type="email" placeholder="email" required/>
-            <input type="password" placeholder="senha" required/>
+        <FormStyle onSubmit={isSignUp ? doSignUp : doLogin  }>
+            <input type="email" onChange={(e)=>setEmail(e.target.value)} placeholder="email" value={email} required/>
+            <input type="password" onChange={(e)=>setPassword(e.target.value)} placeholder="senha" value={password} required/>
             {children}
             <button type="submit">Entrar</button>
         </FormStyle>

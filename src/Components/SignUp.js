@@ -3,19 +3,16 @@ import styled from "styled-components";
 import UserConfigStyle from "./UserConfigStyle";
 import Forms from "./Forms";
 
-// function isImgLink(url) {
-//     if(typeof url !== 'string') return false;
-//     return(url.match(/^http[^\?]*.(jpg|jpeg|gif|png|tiff|bmp)(\?(.*))?$/gmi) != null);
-// }
-
-export default function SignUp(){
+export default function SignUp({email, setEmail, password, setPassword, doLogin, doSignUp, name,setName, image, setImage}){
+   
+    
     return(
         <UserConfigStyle>
-            <Forms>
-            <input type="text" placeholder="nome" required/>
-            <input type="url" placeholder="foto" required/>
+            <Forms isSignUp={true} email={email} setEmail={setEmail} password={password} setPassword={setPassword} doLogin={doLogin} doSignUp={doSignUp}>
+            <input type="text" onChange={(e)=>setName(e.target.value)} placeholder="nome" value={name} required/>
+            <input type="url" placeholder="foto" onChange={(e)=>setImage(e.target.value)} value={image} required/>
             </Forms>
-            <Link to="/" >
+            <Link to="/">
                 <SignUpLink>Já tem uma conta? Faça login!</SignUpLink>
             </Link>
         </UserConfigStyle>

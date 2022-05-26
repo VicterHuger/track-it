@@ -1,14 +1,14 @@
-
 import {Link} from "react-router-dom";
 import styled from "styled-components";
 import UserConfigStyle from "./UserConfigStyle";
 import Forms from "./Forms";
 
 
-export default function LoginScreen(){
+export default function LoginScreen({email,setEmail,password, setPassword, doLogin, doSignUp}){
+
     return(
         <UserConfigStyle>
-            <Forms/>
+            <Forms email={email} setEmail={setEmail} password={password} setPassword={setPassword} doLogin={doLogin} doSignUp={doSignUp} isSignUp={false}/>
             <Link to="/cadastro" >
                 <SignUpLink>Não tem uma conta? Cadastre-se!</SignUpLink>
             </Link>
