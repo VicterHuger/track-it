@@ -4,11 +4,11 @@ import UserConfigStyle from "./UserConfigStyle";
 import Forms from "./Forms";
 
 
-export default function LoginScreen({email,setEmail,password, setPassword, doLogin, doSignUp, isDisabled}){
+export default function LoginScreen({formData, setFormData, doLogin, doSignUp, isDisabled,handleForm}){
 
     return(
         <UserConfigStyle>
-            <Forms email={email} setEmail={setEmail} password={password} setPassword={setPassword} doLogin={doLogin} doSignUp={doSignUp} isSignUp={false} isDisabled={isDisabled}/>
+            <Forms formData={formData} setFormData={setFormData} doLogin={doLogin} doSignUp={doSignUp} isSignUp={false} isDisabled={isDisabled} handleForm={handleForm}/>
             <Link to="/cadastro" >
                 <SignUpLink>Não tem uma conta? Cadastre-se!</SignUpLink>
             </Link>

@@ -1,38 +1,84 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
 import { useState } from "react";
+import axios from "axios";
 
 import GlobalStyle from "./../Styles/globalStyles";
 import LoginScreen from "./LoginScreen";
 import SignUp from "./SignUp";
 
 export default function App(){
-    const [email,setEmail]=useState("");
-    const [password,setPassword]=useState("");
-    const [name,setName]=useState("");
-    const [image,setImage]=useState("");
+
+    const navigate=useNavigate();
+
+    const [formData, setFormData] = useState({
+        name: '',
+        email: '',
+        image: '',
+        password: ''
+      });
     const [isDisabled,setIsDisabled]=useState(false);
+
+   
+
+    function handleForm(e){
+        setFormData({
+            ...formData,
+            [e.target.name]: e.target.value,
+          }); 
+    }
 
     function doLogin(e){
         e.preventDefault();
         setIsDisabled(true);
-        setEmail("");
-        setPassword("");
+        console.log(formData);
+        setFormData({
+            ...formData,
+            email: "",
+            password: "",
+          }); 
+
         alert("login okay");
+        
+        //promise.catch(error=>FailedRequest(error));
+    }
+
+    function CleanInputs(){
+        setIsDisabled(false);
+        
+        setFormData({
+            ...formData,
+            name: '',
+            email: '',
+            image: '',
+            password: ''
+        });
+    }
+    
+    function FailedRequest(error){
+        alert(`${error.response.data.details.join(" ")}`);
+        CleanInputs();
     }
 
     function doSignUp(e){    
         e.preventDefault();
         setIsDisabled(true);
-        
-        if(!isImgLink(image)){
+        console.log(formData);  
+
+        if(!isImgLink(formData.image)){
+            CleanInputs();
             return alert("Insira um link de uma imagem válida!");
         }
         
-        setEmail("");
-        setPassword("");
-        setName("");
-        setImage("");
-        
+        const promise=axios.post("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/sign-up",{image:formData.image});
+
+        promise.then((res)=>{
+            alert("Cadastrado com sucesso!");
+            CleanInputs();
+            navigate("/");
+
+        });
+
+        promise.catch(error=>FailedRequest(error));
     }
 
     function isImgLink(url){
@@ -45,8 +91,8 @@ export default function App(){
             <GlobalStyle/> 
                 <BrowserRouter>
                     <Routes>
-                        <Route path="/" element={<LoginScreen email={email} setEmail={setEmail} password={password} setPassword={setPassword} doSignUp={doSignUp} doLogin={doLogin} isDisabled={isDisabled}/>}/>
-                        <Route path="/cadastro" element={<SignUp email={email} setEmail={setEmail} password={password} setPassword={setPassword} doLogin={doLogin} doSignUp={doSignUp} name={name} setName={setName}  image={image} setImage={setImage} isDisabled={isDisabled}/>}/>
+                        <Route path="/" element={<LoginScreen formData={formData} setFormData={setFormData} doSignUp={doSignUp} doLogin={doLogin} isDisabled={isDisabled}handleForm={handleForm} />}/>
+                        <Route path="/cadastro" element={<SignUp formData={formData} setFormData={setFormData} doLogin={doLogin} doSignUp={doSignUp} isDisabled={isDisabled}handleForm={handleForm} />}/>
                     </Routes>
                 </BrowserRouter>
         </>
