@@ -5,7 +5,7 @@ import UserConfigStyle from "./UserConfigStyle";
 import Forms from "./Forms";
 
 
-export default function LoginScreen({formData, setFormData, isDisabled, handleForm, setIsDisabled, CleanInputs, FailedRequest}){
+export default function LoginScreen({formData, setFormData, isDisabled, handleForm, setIsDisabled, CleanInputs, FailedRequest, setLoginResponse}){
     
     const navigate=useNavigate();
 
@@ -21,6 +21,8 @@ export default function LoginScreen({formData, setFormData, isDisabled, handleFo
         const promise=axios.post("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/login", body);
 
         promise.then(res=>{
+            setLoginResponse(res.data);
+            console.log(res.data);
             setIsDisabled(false);
             CleanInputs();
             navigate("/hoje");
