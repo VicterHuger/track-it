@@ -1,24 +1,31 @@
+import axios  from "axios";
 import {Link} from "react-router-dom";
 import styled from "styled-components";
 import UserConfigStyle from "./UserConfigStyle";
 import Forms from "./Forms";
 
 
-export default function LoginScreen({formData, setFormData, isDisabled, handleForm, setIsDisabled}){
+export default function LoginScreen({formData, setFormData, isDisabled, handleForm, setIsDisabled, CleanInputs, FailedRequest}){
 
     function doLogin(e){
         e.preventDefault();
         setIsDisabled(true);
-        console.log(formData);
-        setFormData({
-            ...formData,
-            email: "",
-            password: "",
-          }); 
-
-        alert("login okay");
         
-        //promise.catch(error=>FailedRequest(error));
+        const body={
+            email: formData.email,
+            password: formData.password,
+        }
+
+        const promise=axios.post("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/login", body);
+
+        promise.then(res=>{
+            alert("funcionou!")
+            setIsDisabled(false);
+            CleanInputs();
+        });
+
+        promise.catch(error=>FailedRequest(error));
+
     }
 
     return(

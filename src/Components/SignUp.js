@@ -5,30 +5,14 @@ import UserConfigStyle from "./UserConfigStyle";
 import Forms from "./Forms";
 import Input from "../Styles/Input";
 
-export default function SignUp({formData, setFormData, isDisabled, setIsDisabled, handleForm}){
+export default function SignUp({formData, setFormData, isDisabled, setIsDisabled, handleForm, CleanInputs, FailedRequest}){
+    
     const navigate=useNavigate();
 
-    function CleanInputs(){
-        setIsDisabled(false);
-        
-        setFormData({
-            ...formData,
-            name: '',
-            email: '',
-            image: '',
-            password: ''
-        });
-    }
-    
-    function FailedRequest(error){
-        alert(`${error.response.data.details.join(" ")}`);
-        CleanInputs();
-    }
 
     function doSignUp(e){    
         e.preventDefault();
         setIsDisabled(true);
-        console.log(formData);  
 
         if(!isImgLink(formData.image)){
             CleanInputs();
