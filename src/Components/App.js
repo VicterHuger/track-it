@@ -6,6 +6,8 @@ import UserContext from "../Contexts/UserContext";
 import LoginScreen from "./LoginScreen";
 import SignUp from "./SignUp";
 import TodayScreen from "./TodayScreen";
+import HistoryScreen from "./HistoryScreen";
+import HabitsScreen from "./HabitsScreen";
 
 export default function App(){
 
@@ -53,6 +55,8 @@ export default function App(){
                         <Routes>
                             <Route path="/" element={<LoginScreen formData={formData} setFormData={setFormData} isDisabled={isDisabled} setIsDisabled={setIsDisabled} handleForm={handleForm} CleanInputs={CleanInputs} FailedRequest={FailedRequest} setLoginResponse={setLoginResponse} />}/>
                             <Route path="/cadastro" element={<SignUp formData={formData} setFormData={setFormData} setIsDisabled={setIsDisabled} isDisabled={isDisabled}handleForm={handleForm} CleanInputs={CleanInputs} FailedRequest={FailedRequest} />}/>
+                            <Route path="/habitos" element={<HabitsScreen/>} />
+                            <Route path="/historico" element={<HistoryScreen/>}/>
                             <Route path="/hoje" element={<TodayScreen />}/>
                         </Routes>
                     </BrowserRouter>
