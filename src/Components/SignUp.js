@@ -6,7 +6,8 @@ import Forms from "./Forms";
 import Input from "../Styles/Input";
 
 export default function SignUp({formData, setFormData, isDisabled, setIsDisabled, handleForm, CleanInputs, FailedRequest}){
-    
+    window.scrollTo(1,0);
+
     const navigate=useNavigate();
 
 

@@ -23,11 +23,8 @@ position:fixed;
 bottom:0;
 left:0;
 height:70px;
-background-color:"ffffff";
+background-color:#ffffff;
 padding: 0 8%;
-
-
-
 
 h3{
     color:#52B6FF;

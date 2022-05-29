@@ -7,6 +7,8 @@ import Forms from "./Forms";
 
 export default function LoginScreen({formData, setFormData, isDisabled, handleForm, setIsDisabled, CleanInputs, FailedRequest, setLoginResponse}){
     
+    window.scrollTo(1,0);
+
     const navigate=useNavigate();
 
     function doLogin(e){

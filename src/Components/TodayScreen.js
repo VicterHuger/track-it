@@ -4,6 +4,7 @@ import Header from "./Header";
 import Navbar from "./Navbar";
 
 export default function TodayScreen(){
+    window.scrollTo(1,0);
     return(
         <>
             <Header/>
@@ -16,5 +17,4 @@ export default function TodayScreen(){
 const Content=styled.div`
     margin:70px 0;
     width:100%;
-    background-color:#F2F2F2; 
 `;
