@@ -80,14 +80,7 @@ export default function HabitsScreen(){
 
     function mapHabits(){
         if(selected===undefined){
-            return;
-        // }
-        // if(habits.length===1){
-        //     return habits.map((habit,index)=>
-        //     <Habit  key={index} selected={selected} isNewHabit={false} >
-        //         <h3>{habit.name}</h3>
-        //         <ion-icon onClick={() => ConfirmDelet(habit.id)} name="trash-outline"></ion-icon>
-        //     </Habit>);
+            return; 
         }else if(habits.length>0){
             return habits.map((habit,index)=>
             <Habit  key={index} selected={selected[index]} isNewHabit={false} >
