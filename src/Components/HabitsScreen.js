@@ -16,7 +16,7 @@ import LoginScreen from "./LoginScreen";
 export default function HabitsScreen(){
     window.scrollTo(1,0);
 
-    const {loginResponse}=useContext(UserContext);
+    const {userData}=useContext(UserContext);
     const initialSelected=useMemo(()=>[false,false,false,false,false,false,false],[])
     const [habits,setHabits]=useState([]);
     const [habitName,setHabitName]=useState("");
@@ -30,7 +30,7 @@ export default function HabitsScreen(){
     function RenderHabits(){
         const config={
             headers:{
-                Authorization:`Bearer ${loginResponse.token}`
+                Authorization:`Bearer ${userData.token}`
             }
         };
         const promise=axios.get("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits", config);
@@ -65,7 +65,7 @@ export default function HabitsScreen(){
         if(window.confirm('Tem certeza que quer deletar esse hábito?')){
             const config={
                 headers:{
-                    Authorization:`Bearer ${loginResponse.token}`
+                    Authorization:`Bearer ${userData.token}`
                 }
             };
             const promise=axios.delete(`https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${id}`,config);
@@ -135,7 +135,7 @@ export default function HabitsScreen(){
         };
         const config={
             headers:{
-                Authorization:`Bearer ${loginResponse.token}`
+                Authorization:`Bearer ${userData.token}`
             }
         };
         const promise=axios.post("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits",body,config);

@@ -6,7 +6,7 @@ import UserContext from "../Contexts/UserContext";
 
 export default function HabitToday({habit,id, RenderTodayHabits}){
     const [isHighScore,setIsHighScore]=useState(false);
-    const {loginResponse}=useContext(UserContext);
+    const {userData}=useContext(UserContext);
     
     useEffect(()=>{
         if(habit.currentSequence===habit.highestSequence){
@@ -17,7 +17,7 @@ export default function HabitToday({habit,id, RenderTodayHabits}){
     function handleClick(id){
         const config={
             headers:{
-                Authorization:`Bearer ${loginResponse.token}`
+                Authorization:`Bearer ${userData.token}`
             }
         };
 

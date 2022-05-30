@@ -18,7 +18,7 @@ export default function TodayScreen(){
     dayjs().locale('pt-br');
 
     const {progress}=useContext(DayProgessContext);
-    const {loginResponse}=useContext(UserContext);
+    const {userData}=useContext(UserContext);
 
     const[title,setTitle]=useState(dayjs().locale('pt-br').format('dddd, DD/MM'));
     const [habits,setHabits]=useState([]);
@@ -39,7 +39,7 @@ export default function TodayScreen(){
     function RenderTodayHabits(){
         const config={
             headers:{
-                Authorization:`Bearer ${loginResponse.token}`
+                Authorization:`Bearer ${userData.token}`
             }
         };
         const promise=axios.get("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/today",config);

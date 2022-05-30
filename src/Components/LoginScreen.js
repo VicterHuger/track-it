@@ -5,9 +5,20 @@ import UserConfigStyle from "./UserConfigStyle";
 import Forms from "./Forms";
 
 
-export default function LoginScreen({formData, setFormData, isDisabled, handleForm, setIsDisabled, CleanInputs, FailedRequest, setLoginResponse}){
+export default function LoginScreen({formData, setFormData, isDisabled, handleForm, setIsDisabled, CleanInputs, FailedRequest, setLoginResponse,setUserData}){
     
     window.scrollTo(1,0);
+
+    function VerifyLog(){
+        const navigate=useNavigate();
+        const itemStorage=localStorage.getItem("user");
+        if(itemStorage!==null){
+            setUserData(JSON.parse(itemStorage));
+            navigate("/hoje");         
+        }
+    }
+    
+    VerifyLog();
 
     const navigate=useNavigate();
 
@@ -24,6 +35,13 @@ export default function LoginScreen({formData, setFormData, isDisabled, handleFo
 
         promise.then(res=>{
             setLoginResponse(res.data);
+            const userData={
+                image:res.data.image,
+                token:res.data.token
+            };
+            setUserData(userData);
+            localStorage.setItem("user",JSON.stringify(userData));
+
             setIsDisabled(false);
             CleanInputs();
             navigate("/hoje");

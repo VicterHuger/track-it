@@ -5,11 +5,11 @@ import UserContext from "../Contexts/UserContext";
 
 export default function Header(){
     
-    const {loginResponse}=useContext(UserContext);
+    const {userData}=useContext(UserContext);
     return(
     <Container>
         <h1>TrackIt</h1>
-        <img src={loginResponse.image} alt="Foto do usuário no formato circular" />
+        <img src={userData.image} alt="Foto do usuário no formato circular" />
     </Container>
     )
 }
