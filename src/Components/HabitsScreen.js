@@ -61,7 +61,7 @@ export default function HabitsScreen(){
     },[RenderHabits]);
 
     function ConfirmDelet(id){
-        if(window.confirm('Tem certeza que quer deletar esse hábito')){
+        if(window.confirm('Tem certeza que quer deletar esse hábito?')){
             const config={
                 headers:{
                     Authorization:`Bearer ${loginResponse.token}`
@@ -69,6 +69,9 @@ export default function HabitsScreen(){
             };
             const promise=axios.delete(`https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${id}`,config);
             promise.then((res)=>{
+                if(habits.length===1){
+                    setHabits([]);
+                }
                return RenderHabits();
             });
             promise.catch(err=>err.response.data.message);
@@ -78,14 +81,14 @@ export default function HabitsScreen(){
     function mapHabits(){
         if(selected===undefined){
             return;
-        }
-        if(habits.length===1){
-            return habits.map((habit,index)=>
-            <Habit  key={index} selected={selected} isNewHabit={false} >
-                <h3>{habit.name}</h3>
-                <ion-icon onClick={() => ConfirmDelet(habit.id)} name="trash-outline"></ion-icon>
-            </Habit>);
-        }else if(habits.length>1){
+        // }
+        // if(habits.length===1){
+        //     return habits.map((habit,index)=>
+        //     <Habit  key={index} selected={selected} isNewHabit={false} >
+        //         <h3>{habit.name}</h3>
+        //         <ion-icon onClick={() => ConfirmDelet(habit.id)} name="trash-outline"></ion-icon>
+        //     </Habit>);
+        }else if(habits.length>0){
             return habits.map((habit,index)=>
             <Habit  key={index} selected={selected[index]} isNewHabit={false} >
                 <h3>{habit.name}</h3>
