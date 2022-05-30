@@ -1,17 +1,23 @@
-import { useState,useEffect } from "react";
+import { useState,useEffect,useContext } from "react";
 import styled from "styled-components";
 import dayjs from "dayjs";
 
+import DayProgessContext from "../Contexts/DayProgessContext";
 import Header from "./Header";
 import Navbar from "./Navbar";
 
 export default function TodayScreen(){
 
     window.scrollTo(1,0);
+
+    require('dayjs/locale/pt-br');
+
     dayjs().locale('pt-br');
 
+    const {progress}=useContext(DayProgessContext);
+
     const[title,setTitle]=useState(dayjs().locale('pt-br').format('dddd, DD/MM'));
-    const[percentage,setPercentage]=useState(0);
+    
 
     
     useEffect(()=>{
@@ -20,6 +26,7 @@ export default function TodayScreen(){
             text+=title[i];
         }
         setTitle(text);
+        
     },[title]);
     
 
@@ -31,6 +38,9 @@ export default function TodayScreen(){
             <Header/>
             <Content>
                 <h3>{title}</h3>
+                <SubTitle percentage={progress.percentage}>
+                    {progress.percentage ===0 ? "Nenhum hábito concluído ainda" : `${progress.percentage}% dos hábitos concluídos`}
+                </SubTitle>
             </Content>
             <Navbar/>
         </>
@@ -45,5 +55,9 @@ const Content=styled.div`
         color:#126BA5;
         font-size:23px;
     }
+`;
+const SubTitle=styled.h4`
+    font-size:18px;
+    margin:10px 0 28px;
+    color:${props=>props.percentage===0 ? "#BABABA" : "#8FC549"};
 `
-;

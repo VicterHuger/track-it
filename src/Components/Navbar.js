@@ -4,7 +4,9 @@ import styled from "styled-components";
 
 import ProgessBar from "./ProgessBar";
 
+
 export default function Navbar(){
+    
     return(
         <Menu>
             <Link to="/habitos"><h3>Hábitos</h3></Link>
