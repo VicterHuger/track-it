@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext, useCallback } from "react";
+import { useState, useEffect, useContext, useCallback, useMemo } from "react";
 import axios from "axios";
 import styled from "styled-components";
 import { ThreeDots } from "react-loader-spinner";
@@ -16,7 +16,7 @@ export default function HabitsScreen(){
     window.scrollTo(1,0);
 
     const {loginResponse}=useContext(UserContext);
-    const initialSelected=[false,false,false,false,false,false,false]
+    const initialSelected=useMemo(()=>[false,false,false,false,false,false,false],[])
     const [habits,setHabits]=useState([]);
     const [habitName,setHabitName]=useState("");
     const [selected,setSelected]=useState([]);
@@ -24,6 +24,7 @@ export default function HabitsScreen(){
     const [isDisabledNewHabit,setIsDisabledNewHabit]=useState(false);
     const [isDisabled,setIsDisabled]=useState(false);
     const [newHabit,setNewHabit]=useState([]);
+
 
     const RenderHabits=useCallback(()=>{
         const config={
@@ -34,11 +35,22 @@ export default function HabitsScreen(){
         const promise=axios.get("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits", config);
 
         promise.then( (res)=>{
+            const mat=[];
             if(res.data.length!==0){
-                setHabits(...res.data);
-                alert("sucesso na requisição");
-            };
-            alert("sucesso na requisição, mas não fez nada");
+                const newArraySelected=[...selected];
+                setHabits([...res.data]);
+                res.data.forEach(habit=>{
+                    const newSelected=[...initialSelected];
+                    habit.days.forEach(value=>{
+                        newSelected[value]=true;
+                    });
+                    newArraySelected.push(newSelected);
+                    console.log(newArraySelected);
+                    mat.push(newArraySelected);
+                });
+                setSelected(...mat);
+            }    
+            
         });
 
         promise.catch( (err) => alert(err.response.data.message) );
@@ -48,22 +60,20 @@ export default function HabitsScreen(){
         RenderHabits();
     },[RenderHabits]);
 
+    console.log(selected);
     function mapHabits(){
-        if(habits.length!==0){
-            habits.map((habit,i)=>{
-
-                if(habit.days.length!==0){
-                    const newSelected=[...selected,initialSelected];
-                  return habit.days.forEach(value=>{
-                    newSelected[i][value]=true;
-                    setSelected(...newSelected)
-                });
-                }
-                return setSelected(...selected);
-            });
-
-            return habits.map(habit=>
-            <Habit habit={habit} key={habit.id} selected={selected} setSelected={setSelected}>
+        if(selected===undefined){
+            return;
+        }
+        if(habits.length===1){
+            return habits.map((habit,index)=>
+            <Habit  key={index} selected={selected} isNewHabit={false} >
+                <h3>{habit.name}</h3>
+                <ion-icon name="trash-outline"></ion-icon>
+            </Habit>);
+        }else if(habits.length>1){
+            return habits.map((habit,index)=>
+            <Habit  key={index} selected={selected[index]} isNewHabit={false} >
                 <h3>{habit.name}</h3>
                 <ion-icon name="trash-outline"></ion-icon>
             </Habit>);
@@ -88,7 +98,7 @@ export default function HabitsScreen(){
     function displayNewHabit(){
         return newHabit.map((value,index)=>{
             return(
-                <Habit key={index} habitName={habitName} setHabitName={setHabitName} ChangeColor={ChangeColor} selectedNewHabit={selectedNewHabit} isDisabled={isDisabled}>    
+                <Habit key={index} habitName={habitName} setHabitName={setHabitName} ChangeColor={ChangeColor} selectedNewHabit={selectedNewHabit} isDisabled={isDisabled} isNewHabit={true}>    
                     <InputNewHabit setHabitName={setHabitName} habitName={habitName} isDisabled={isDisabled}/>
                     <ButtonCancel isDisabled={isDisabled} CancelHabit={CancelHabit}>Cancelar</ButtonCancel>
                     <ButtonSave isDisabled={isDisabled} SaveHabit={SaveHabit} >{buttonContent()}</ButtonSave>
@@ -111,7 +121,6 @@ export default function HabitsScreen(){
         const body={
             name:habitName,
             days,
-            id:90000
         };
         const config={
             headers:{
@@ -119,6 +128,17 @@ export default function HabitsScreen(){
             }
         };
         const promise=axios.post("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits",body,config);
+
+        promise.then(res=>{
+            console.log(res.data);
+            setHabitName("");
+            setIsDisabled(false);
+            setSelectedNewHabit(initialSelected);
+            setIsDisabledNewHabit(false);
+            setNewHabit([]);
+            setSelected([]);
+            RenderHabits();
+        })
 
         promise.catch(err=>{
             alert(err.response.data.message)
@@ -139,7 +159,7 @@ export default function HabitsScreen(){
                 <h2>Meus hábitos</h2>
                 <button onClick={()=>{setNewHabit([...newHabit,""]);setIsDisabledNewHabit(true)}} disabled={isDisabledNewHabit}>+</button>
               </TitleContent>  
-              <Habits>
+              <Habits length={habits.length}>
                 {renderNewHabit}
                 {renderHabits}
               </Habits>
