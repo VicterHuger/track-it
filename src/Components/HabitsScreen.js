@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext, useCallback } from "react";
 import axios from "axios";
 import styled from "styled-components";
 import { ThreeDots } from "react-loader-spinner";
@@ -25,7 +25,7 @@ export default function HabitsScreen(){
     const [isDisabled,setIsDisabled]=useState(false);
     const [newHabit,setNewHabit]=useState([]);
 
-    useEffect(()=>{
+    const RenderHabits=useCallback(()=>{
         const config={
             headers:{
                 Authorization:`Bearer ${loginResponse.token}`
@@ -42,8 +42,30 @@ export default function HabitsScreen(){
         });
 
         promise.catch( (err) => alert(err.response.data.message) );
-    },[loginResponse.token]);
+    },[loginResponse.token])
 
+    useEffect(()=>{
+        RenderHabits();
+    },[RenderHabits]);
+
+    // function RenderHabits(){
+    //     const config={
+    //         headers:{
+    //             Authorization:`Bearer ${loginResponse.token}`
+    //         }
+    //     };
+    //     const promise=axios.get("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits", config);
+
+    //     promise.then( (res)=>{
+    //         if(res.data.length!==0){
+    //             setHabits(...res.data);
+    //             alert("sucesso na requisição");
+    //         };
+    //         alert("sucesso na requisição, mas não fez nada");
+    //     });
+
+    //     promise.catch( (err) => alert(err.response.data.message) );
+    // }
 
     function mapHabits(){
         if(habits.length!==0){
@@ -76,13 +98,18 @@ export default function HabitsScreen(){
         }
     }
     
+    function CancelHabit(){
+        setIsDisabledNewHabit(false);
+        setNewHabit([]);
+        RenderHabits();
+    }
 
     function displayNewHabit(){
         return newHabit.map((value,index)=>{
             return(
                 <Habit key={index} habitName={habitName} setHabitName={setHabitName} ChangeColor={ChangeColor} selectedNewHabit={selectedNewHabit} isDisabled={isDisabled}>    
                     <InputNewHabit setHabitName={setHabitName} habitName={habitName} isDisabled={isDisabled}/>
-                    <ButtonCancel isDisabled={isDisabled}>Cancelar</ButtonCancel>
+                    <ButtonCancel isDisabled={isDisabled} CancelHabit={CancelHabit}>Cancelar</ButtonCancel>
                     <ButtonSave isDisabled={isDisabled} SaveHabit={SaveHabit} >{buttonContent()}</ButtonSave>
                 </Habit>)}); 
     } 
