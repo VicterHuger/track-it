@@ -24,7 +24,6 @@ export default function LoginScreen({formData, setFormData, isDisabled, handleFo
 
         promise.then(res=>{
             setLoginResponse(res.data);
-            console.log(res.data);
             setIsDisabled(false);
             CleanInputs();
             navigate("/hoje");

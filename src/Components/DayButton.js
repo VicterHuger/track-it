@@ -1,7 +1,7 @@
 import styled from "styled-components";
-export default function DayButton({children,selected}){
+export default function DayButton({children,selected,index,ChangeColor,isDisabled}){
     return (
-        <Button>
+        <Button onClick={()=>{ChangeColor(index)}} disabled={isDisabled} selected={selected}>
         {children}
         </Button>
     )

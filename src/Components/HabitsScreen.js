@@ -1,20 +1,27 @@
 import { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import styled from "styled-components";
+import { ThreeDots } from "react-loader-spinner";
+
 import UserContext from "../Contexts/UserContext";
 import Header from "./Header";
 import Navbar from "./Navbar";
 import Habits from "./Habits";
 import Habit from "./Habit";
+import InputNewHabit from "./InputNewHabit";
+import ButtonSave from "./ButtonSave";
+import ButtonCancel from "./ButtonCancel";
 
 export default function HabitsScreen(){
     window.scrollTo(1,0);
 
     const {loginResponse}=useContext(UserContext);
-
+    const initialSelected=[false,false,false,false,false,false,false]
     const [habits,setHabits]=useState([]);
     const [habitName,setHabitName]=useState("");
-    const [selected,setSelected]=useState([false,false,false,false,false,false,false]);
+    const [selected,setSelected]=useState([]);
+    const [selectedNewHabit,setSelectedNewHabit]=useState([false,false,false,false,false,false,false]);
+    const [isDisabledNewHabit,setIsDisabledNewHabit]=useState(false);
     const [isDisabled,setIsDisabled]=useState(false);
     const [newHabit,setNewHabit]=useState([]);
 
@@ -40,15 +47,20 @@ export default function HabitsScreen(){
 
     function mapHabits(){
         if(habits.length!==0){
-            habits.map(habit=>{
+            habits.map((habit,i)=>{
+
                 if(habit.days.length!==0){
-                  return habit.days.map(value=>setSelected(...selected, selected[value]=true))
+                    const newSelected=[...selected,initialSelected];
+                  return habit.days.forEach(value=>{
+                    newSelected[i][value]=true;
+                    setSelected(...newSelected)
+                });
                 }
                 return setSelected(...selected);
             });
 
             return habits.map(habit=>
-            <Habit habit={habit} key={habit.id}>
+            <Habit habit={habit} key={habit.id} selected={selected} setSelected={setSelected}>
                 <h3>{habit.name}</h3>
                 <ion-icon name="trash-outline"></ion-icon>
             </Habit>);
@@ -56,23 +68,44 @@ export default function HabitsScreen(){
         return;
     };
 
-    function displayNewHabit(){
-                
-                return newHabit.map((value,index)=>{
-                    return(<Habit key={index} habitName={habitName} setHabitName={setHabitName} selected={selected}>
-                            
-                        <input type="text" 
-                            placeholder="nome do hábito"
-                            onChange={e=>setHabitName(e.target.value)}
-                            value={habitName} />
-                        <button>Cancelar</button>
-                        <button>Salvar</button>
-                    </Habit>)}); 
-            } 
-        
-                 
-   
+    function buttonContent(){
+        if(isDisabled){
+            return (<ThreeDots heigth={11} width={43} radius={50} color="#FFFFFF" />);
+        }else{
+            return "Salvar";
+        }
+    }
     
+
+    function displayNewHabit(){
+        return newHabit.map((value,index)=>{
+            return(
+                <Habit key={index} habitName={habitName} setHabitName={setHabitName} ChangeColor={ChangeColor} selectedNewHabit={selectedNewHabit} isDisabled={isDisabled}>    
+                    <InputNewHabit setHabitName={setHabitName} habitName={habitName} isDisabled={isDisabled}/>
+                    <ButtonCancel isDisabled={isDisabled}>Cancelar</ButtonCancel>
+                    <ButtonSave isDisabled={isDisabled} SaveHabit={SaveHabit} >{buttonContent()}</ButtonSave>
+                </Habit>)}); 
+    } 
+        
+    function ChangeColor(index){
+        const newSelected=[...selectedNewHabit];
+        newSelected[index]=!selectedNewHabit[index];
+        return setSelectedNewHabit([...newSelected]);
+    }
+   
+    function SaveHabit(){
+        console.log("entrou");
+        setIsDisabled(true);
+        const days=[];
+        selectedNewHabit.forEach((value,index)=>{
+            if(value) return days.push(index);
+        });
+        const body={
+            name:habitName,
+            days
+        };
+        
+    }
     
     const renderHabits=mapHabits();
     const renderNewHabit=displayNewHabit();
@@ -84,7 +117,7 @@ export default function HabitsScreen(){
             <Content>
               <TitleContent>
                 <h2>Meus hábitos</h2>
-                <button onClick={()=>{setNewHabit([...newHabit,""]);setIsDisabled(true)}} disabled={isDisabled}>+</button>
+                <button onClick={()=>{setNewHabit([...newHabit,""]);setIsDisabledNewHabit(true)}} disabled={isDisabledNewHabit}>+</button>
               </TitleContent>  
               <Habits>
                 {renderNewHabit}
