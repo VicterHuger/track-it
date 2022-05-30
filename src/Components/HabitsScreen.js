@@ -48,25 +48,6 @@ export default function HabitsScreen(){
         RenderHabits();
     },[RenderHabits]);
 
-    // function RenderHabits(){
-    //     const config={
-    //         headers:{
-    //             Authorization:`Bearer ${loginResponse.token}`
-    //         }
-    //     };
-    //     const promise=axios.get("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits", config);
-
-    //     promise.then( (res)=>{
-    //         if(res.data.length!==0){
-    //             setHabits(...res.data);
-    //             alert("sucesso na requisição");
-    //         };
-    //         alert("sucesso na requisição, mas não fez nada");
-    //     });
-
-    //     promise.catch( (err) => alert(err.response.data.message) );
-    // }
-
     function mapHabits(){
         if(habits.length!==0){
             habits.map((habit,i)=>{
@@ -129,8 +110,20 @@ export default function HabitsScreen(){
         });
         const body={
             name:habitName,
-            days
+            days,
+            id:90000
         };
+        const config={
+            headers:{
+                Authorization:`Bearer ${loginResponse.token}`
+            }
+        };
+        const promise=axios.post("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits",body,config);
+
+        promise.catch(err=>{
+            alert(err.response.data.message)
+            setIsDisabled(false);
+        });
         
     }
     
