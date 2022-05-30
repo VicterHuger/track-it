@@ -42,10 +42,13 @@ export default function App(){
             name: '',
             email: '',
             image: '',
-            password: ''
+            password: '',
+        
         });
     }
     
+    
+
     function FailedRequest(error){
         alert(`${error.response.data.message}`);
         CleanInputs();

@@ -11,6 +11,7 @@ import Habit from "./Habit";
 import InputNewHabit from "./InputNewHabit";
 import ButtonSave from "./ButtonSave";
 import ButtonCancel from "./ButtonCancel";
+import LoginScreen from "./LoginScreen";
 
 export default function HabitsScreen(){
     window.scrollTo(1,0);
@@ -26,7 +27,7 @@ export default function HabitsScreen(){
     const [newHabit,setNewHabit]=useState([]);
 
 
-    const RenderHabits=useCallback(()=>{
+    function RenderHabits(){
         const config={
             headers:{
                 Authorization:`Bearer ${loginResponse.token}`
@@ -54,11 +55,11 @@ export default function HabitsScreen(){
         });
 
         promise.catch( (err) => alert(err.response.data.message) );
-    },[loginResponse.token])
+    }
 
     useEffect(()=>{
         RenderHabits();
-    },[RenderHabits]);
+    },[]);
 
     function ConfirmDelet(id){
         if(window.confirm('Tem certeza que quer deletar esse hábito?')){
