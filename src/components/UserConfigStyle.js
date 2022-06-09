@@ -1,7 +1,7 @@
-import Container from "./../Styles/Container";
-import ImageLogo from "../Styles/ImageLogo";
+import Container from "../assets/styles/Container";
+import ImageLogo from "../assets/styles/ImageLogo";
 
-import Logo from "./../Assets/images/logo.png";
+import Logo from "../assets/images/logo.png";
 
 export default function UserConfigStyle({children}){
    return(

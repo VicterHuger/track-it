@@ -2,7 +2,7 @@ import { useEffect,useState,useContext} from "react";
 import axios from "axios";
 import styled from "styled-components";
 
-import UserContext from "../Contexts/UserContext";
+import UserContext from "../contexts/UserContext";
 
 export default function HabitToday({habit,id, RenderTodayHabits}){
     const [isHighScore,setIsHighScore]=useState(false);
@@ -12,7 +12,7 @@ export default function HabitToday({habit,id, RenderTodayHabits}){
         if(habit.currentSequence===habit.highestSequence){
             setIsHighScore(true);
         }
-    },[isHighScore]);
+    },[habit.currentSequence,habit.highestSequence]);
 
     function handleClick(id){
         const config={
@@ -53,7 +53,7 @@ export default function HabitToday({habit,id, RenderTodayHabits}){
                 </div>
             </HabitsContent>
             <Icon onClick={()=>handleClick(id)} done={habit.done}>
-                <ion-icon name="checkmark-outline"></ion-icon>
+                <ion-icon name="checkmark"></ion-icon>
             </Icon>
         </BackgroundContent>
     )

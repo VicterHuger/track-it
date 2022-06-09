@@ -3,7 +3,7 @@ import axios from "axios";
 import styled from "styled-components";
 import UserConfigStyle from "./UserConfigStyle";
 import Forms from "./Forms";
-import Input from "../Styles/Input";
+import Input from "../assets/styles/Input";
 
 export default function SignUp({formData, setFormData, isDisabled, setIsDisabled, handleForm, CleanInputs, FailedRequest}){
     window.scrollTo(1,0);

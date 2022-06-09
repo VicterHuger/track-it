@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { buildStyles, CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import { useContext } from "react";
-import DayProgessContext from "../Contexts/DayProgessContext";
+import DayProgessContext from "../contexts/DayProgessContext";
 
 
 export default function ProgessBar(){

@@ -1,18 +1,20 @@
-import { useState,useEffect,useContext } from "react";
+import { useState,useEffect,useContext, useCallback} from "react";
 import styled from "styled-components";
 import dayjs from "dayjs";
 
-import DayProgessContext from "../Contexts/DayProgessContext";
-import UserContext from "../Contexts/UserContext";
+import DayProgessContext from "../contexts/DayProgessContext";
+import UserContext from "../contexts/UserContext";
 import Header from "./Header";
 import Navbar from "./Navbar";
 import axios from "axios";
 import HabitToday from "./HabitToday";
 
+
 export default function TodayScreen(){
+    
 
     window.scrollTo(1,0);
-
+    
     require('dayjs/locale/pt-br');
 
     dayjs().locale('pt-br');
@@ -31,12 +33,8 @@ export default function TodayScreen(){
         setTitle(text);
         
     },[title]);
-    
-    useEffect(()=>{
-        RenderTodayHabits()
-    },[]);
-    
-    function RenderTodayHabits(){
+
+    const RenderTodayHabits=useCallback(()=>{
         const config={
             headers:{
                 Authorization:`Bearer ${userData.token}`
@@ -45,13 +43,18 @@ export default function TodayScreen(){
         const promise=axios.get("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/today",config);
 
         promise.then(res=>{
-            console.log(res.data);
             setHabits([...res.data]);
             const numberOfSelected=res.data.filter(habit=>habit.done===true).length;
             progress.setPercentage(Math.round(numberOfSelected*100/(res.data.length)));
         });
+
         promise.catch(err=>alert(err.response.data.message));
-    }
+    },[progress,userData.token]);
+    
+    useEffect(()=>{
+        RenderTodayHabits()
+    },[RenderTodayHabits,userData]);
+    
     return(
         <>
             <Header/>

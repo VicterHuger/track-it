@@ -1,26 +1,29 @@
 import axios  from "axios";
 import {Link,useNavigate} from "react-router-dom";
+import { useEffect,useCallback } from "react";
 import styled from "styled-components";
 import UserConfigStyle from "./UserConfigStyle";
 import Forms from "./Forms";
 
 
-export default function LoginScreen({formData, setFormData, isDisabled, handleForm, setIsDisabled, CleanInputs, FailedRequest, setLoginResponse,setUserData}){
+export default function LoginScreen({formData, setFormData, isDisabled, handleForm, setIsDisabled, CleanInputs, FailedRequest, setUserData}){
     
     window.scrollTo(1,0);
+    const navigate=useNavigate();
 
-    function VerifyLog(){
-        const navigate=useNavigate();
+    const verifyLog=useCallback(()=>{
+        
         const itemStorage=localStorage.getItem("user");
         if(itemStorage!==null){
             setUserData(JSON.parse(itemStorage));
             navigate("/hoje");         
         }
-    }
+    },[navigate,setUserData])
     
-    VerifyLog();
-
-    const navigate=useNavigate();
+    useEffect(()=>{
+        verifyLog();
+    },[verifyLog])
+    
 
     function doLogin(e){
         e.preventDefault();
@@ -34,7 +37,6 @@ export default function LoginScreen({formData, setFormData, isDisabled, handleFo
         const promise=axios.post("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/login", body);
 
         promise.then(res=>{
-            setLoginResponse(res.data);
             const userData={
                 image:res.data.image,
                 token:res.data.token

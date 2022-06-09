@@ -1,8 +1,8 @@
 import styled from "styled-components";
 import {ThreeDots} from "react-loader-spinner";
 
-import Input from "../Styles/Input";
-import Button from "../Styles/Button";
+import Input from "../assets/styles/Input";
+import Button from "../assets/styles/Button";
 
 
 export default function Forms({children,formData, submitFunction, isDisabled, handleForm}){

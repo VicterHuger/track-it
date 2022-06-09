@@ -1,14 +1,14 @@
-import { BrowserRouter, Routes, Route, useNavigate} from "react-router-dom";
-import { useState,useEffect } from "react";
+import { BrowserRouter, Routes, Route} from "react-router-dom";
+import { useState } from "react";
 
-import GlobalStyle from "./../Styles/globalStyles";
-import DayProgessContext from "../Contexts/DayProgessContext";
-import UserContext from "../Contexts/UserContext";
+import DayProgessContext from "../contexts/DayProgessContext";
+import UserContext from "../contexts/UserContext";
 import LoginScreen from "./LoginScreen";
 import SignUp from "./SignUp";
 import TodayScreen from "./TodayScreen";
 import HistoryScreen from "./HistoryScreen";
 import HabitsScreen from "./HabitsScreen";
+import GlobalStyle from "../assets/styles/globalStyles";
 
 
 export default function App(){
@@ -26,11 +26,7 @@ export default function App(){
 
     const [isDisabled,setIsDisabled]=useState(false);
 
-    const [loginResponse, setLoginResponse]=useState(null);
-
     const[userData,setUserData]=useState({});
-
-    
 
     function handleForm(e){
         setFormData({
@@ -51,16 +47,11 @@ export default function App(){
         
         });
     }
-    
-    
 
     function FailedRequest(error){
         alert(`${error.response.data.message}`);
         CleanInputs();
     }
-
-
-
 
     return (
         <>
@@ -69,7 +60,7 @@ export default function App(){
                     <DayProgessContext.Provider value={{progress}}>
                         <BrowserRouter>
                             <Routes>
-                                <Route path="/" element={<LoginScreen formData={formData} setFormData={setFormData} isDisabled={isDisabled} setIsDisabled={setIsDisabled} handleForm={handleForm} CleanInputs={CleanInputs} FailedRequest={FailedRequest} setLoginResponse={setLoginResponse} setUserData={setUserData}/>}/>
+                                <Route path="/" element={<LoginScreen formData={formData} setFormData={setFormData} isDisabled={isDisabled} setIsDisabled={setIsDisabled} handleForm={handleForm} CleanInputs={CleanInputs} FailedRequest={FailedRequest} setUserData={setUserData}/>}/>
                                 <Route path="/cadastro" element={<SignUp formData={formData} setFormData={setFormData} setIsDisabled={setIsDisabled} isDisabled={isDisabled}handleForm={handleForm} CleanInputs={CleanInputs} FailedRequest={FailedRequest} />}/>
                                 <Route path="/habitos" element={<HabitsScreen/>} />
                                 <Route path="/historico" element={<HistoryScreen/>}/>

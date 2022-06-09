@@ -3,7 +3,7 @@ import axios from "axios";
 import styled from "styled-components";
 import { ThreeDots } from "react-loader-spinner";
 
-import UserContext from "../Contexts/UserContext";
+import UserContext from "../contexts/UserContext";
 import Header from "./Header";
 import Navbar from "./Navbar";
 import Habits from "./Habits";
@@ -11,7 +11,7 @@ import Habit from "./Habit";
 import InputNewHabit from "./InputNewHabit";
 import ButtonSave from "./ButtonSave";
 import ButtonCancel from "./ButtonCancel";
-import LoginScreen from "./LoginScreen";
+
 
 export default function HabitsScreen(){
     window.scrollTo(1,0);
@@ -27,7 +27,7 @@ export default function HabitsScreen(){
     const [newHabit,setNewHabit]=useState([]);
 
 
-    function RenderHabits(){
+    const RenderHabits=useCallback(()=>{
         const config={
             headers:{
                 Authorization:`Bearer ${userData.token}`
@@ -46,7 +46,6 @@ export default function HabitsScreen(){
                         newSelected[value]=true;
                     });
                     newArraySelected.push(newSelected);
-                    console.log(newArraySelected);
                     mat.push(newArraySelected);
                 });
                 setSelected(...mat);
@@ -55,11 +54,11 @@ export default function HabitsScreen(){
         });
 
         promise.catch( (err) => alert(err.response.data.message) );
-    }
+    },[initialSelected, userData.token]);
 
     useEffect(()=>{
         RenderHabits();
-    },[]);
+    },[RenderHabits]);
 
     function ConfirmDelet(id){
         if(window.confirm('Tem certeza que quer deletar esse hábito?')){

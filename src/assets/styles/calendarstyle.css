@@ -1,0 +1,15 @@
+:root {
+    --red: rgb(234, 87, 102);
+    --green:rgb(140, 198, 84);
+}
+.rounded-button{
+    border-radius:50%;
+    aspect-ratio:1;
+    height:14.2857%;
+}
+.habbits-completed{
+    background-color: var(--green);
+}
+.habbits-non-completed{
+    background-color: var(--red);
+}
