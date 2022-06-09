@@ -1,7 +1,7 @@
 import { useState, useEffect, useContext, useCallback, useMemo } from "react";
 import axios from "axios";
 import styled from "styled-components";
-import { ThreeDots } from "react-loader-spinner";
+import { RotatingLines, ThreeDots } from "react-loader-spinner";
 
 import UserContext from "../contexts/UserContext";
 import Header from "./Header";
@@ -11,6 +11,7 @@ import Habit from "./Habit";
 import InputNewHabit from "./InputNewHabit";
 import ButtonSave from "./ButtonSave";
 import ButtonCancel from "./ButtonCancel";
+import Loading from "../assets/styles/Loading";
 
 
 export default function HabitsScreen(){
@@ -25,6 +26,7 @@ export default function HabitsScreen(){
     const [isDisabledNewHabit,setIsDisabledNewHabit]=useState(false);
     const [isDisabled,setIsDisabled]=useState(false);
     const [newHabit,setNewHabit]=useState([]);
+    const [loading, setLoading]=useState(true);
 
 
     const RenderHabits=useCallback(()=>{
@@ -49,11 +51,12 @@ export default function HabitsScreen(){
                     mat.push(newArraySelected);
                 });
                 setSelected(...mat);
-            }    
+            }
+            setLoading(false);    
             
         });
 
-        promise.catch( (err) => alert(err.response.data.message) );
+        promise.catch( (err) => {alert(err.response.data.message); setLoading(false) });
     },[initialSelected, userData.token]);
 
     useEffect(()=>{
@@ -122,7 +125,6 @@ export default function HabitsScreen(){
     }
    
     function SaveHabit(){
-        console.log("entrou");
         setIsDisabled(true);
         const days=[];
         selectedNewHabit.forEach((value,index)=>{
@@ -164,16 +166,27 @@ export default function HabitsScreen(){
     return (
         <>
             <Header/>
-            <Content>
-              <TitleContent>
-                <h2>Meus hábitos</h2>
-                <button onClick={()=>{setNewHabit([...newHabit,""]);setIsDisabledNewHabit(true)}} disabled={isDisabledNewHabit}>+</button>
-              </TitleContent>  
-              <Habits length={habits.length}>
-                {renderNewHabit}
-                {renderHabits}
-              </Habits>
-            </Content>
+             {loading ? 
+               <Loading>
+                   <RotatingLines 
+                    width="200"
+                    height="200"
+                    strokeColor="#126BA5"
+                    animationDuration="1"
+                    />
+               </Loading>
+              :
+              <Content>
+                <TitleContent>
+                    <h2>Meus hábitos</h2>
+                    <button onClick={()=>{setNewHabit([...newHabit,""]);setIsDisabledNewHabit(true)}} disabled={isDisabledNewHabit}>+</button>
+                </TitleContent>  
+                <Habits length={habits.length}>
+                    {renderNewHabit}
+                    {renderHabits}
+                </Habits>
+                </Content>}
+            
             <Navbar/>
         </>
     )

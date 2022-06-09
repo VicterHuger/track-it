@@ -2,9 +2,10 @@ import { useEffect,useState,useContext} from "react";
 import axios from "axios";
 import styled from "styled-components";
 
+
 import UserContext from "../contexts/UserContext";
 
-export default function HabitToday({habit,id, RenderTodayHabits}){
+export default function HabitToday({habit,id, RenderTodayHabits, setLoading }){
     const [isHighScore,setIsHighScore]=useState(false);
     const {userData}=useContext(UserContext);
     
@@ -15,6 +16,7 @@ export default function HabitToday({habit,id, RenderTodayHabits}){
     },[habit.currentSequence,habit.highestSequence]);
 
     function handleClick(id){
+        setLoading(true);
         const config={
             headers:{
                 Authorization:`Bearer ${userData.token}`
@@ -22,39 +24,44 @@ export default function HabitToday({habit,id, RenderTodayHabits}){
         };
 
         if(habit.done){
-            
             const promise=axios.post(`https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${id}/uncheck`,null,config);
 
             promise.then(()=>{
+               
                 return RenderTodayHabits();
             });
 
-            promise.catch(err=>alert(err.response.data.message));
+            promise.catch(err=>{
+                
+                return alert(err.response.data.message)});
 
         }else{
             const promise=axios.post(`https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${id}/check`,null,config);
 
             promise.then(()=>{
+                
                 return RenderTodayHabits();
             });
 
-            promise.catch(err=>alert(err.response.data.message));
+            promise.catch(err=>{
+                
+                return alert(err.response.data.message);});
 
         }
     }
 
     return(
         <BackgroundContent>
-            <HabitsContent>
-                <h3>{habit.name}</h3>
-                <div>
-                    <TextGoal>Sequência atual: <TextStreak done={habit.done}>{`${habit.currentSequence} dias`}</TextStreak> </TextGoal>
-                    <TextGoal>Seu recorde: <TextHighStreak isHighScore={isHighScore}>{`${habit.highestSequence} dias`}</TextHighStreak> </TextGoal>        
-                </div>
-            </HabitsContent>
-            <Icon onClick={()=>handleClick(id)} done={habit.done}>
-                <ion-icon name="checkmark"></ion-icon>
-            </Icon>
+                    <HabitsContent>
+                    <h3>{habit.name}</h3>
+                    <div>
+                        <TextGoal>Sequência atual: <TextStreak done={habit.done}>{`${habit.currentSequence} dias`}</TextStreak> </TextGoal>
+                        <TextGoal>Seu recorde: <TextHighStreak isHighScore={isHighScore}>{`${habit.highestSequence} dias`}</TextHighStreak> </TextGoal>        
+                    </div>
+                    </HabitsContent>
+                    <Icon onClick={()=>handleClick(id)} done={habit.done}>
+                        <ion-icon name="checkmark"></ion-icon>
+                    </Icon>
         </BackgroundContent>
     )
 }
@@ -67,6 +74,12 @@ margin-bottom:10px;
 display:flex;
 justify-content:space-between;
 align-items:center;
+&>main{
+        width:100%;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+    }
 `;
 
 const Icon=styled.div`

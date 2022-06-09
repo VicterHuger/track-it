@@ -1,4 +1,5 @@
 import { useState,useEffect,useContext, useCallback} from "react";
+import {RotatingLines} from "react-loader-spinner";
 import styled from "styled-components";
 import dayjs from "dayjs";
 
@@ -8,6 +9,7 @@ import Header from "./Header";
 import Navbar from "./Navbar";
 import axios from "axios";
 import HabitToday from "./HabitToday";
+import Loading from "../assets/styles/Loading";
 
 
 export default function TodayScreen(){
@@ -23,7 +25,8 @@ export default function TodayScreen(){
     const {userData}=useContext(UserContext);
 
     const[title,setTitle]=useState(dayjs().locale('pt-br').format('dddd, DD/MM'));
-    const [habits,setHabits]=useState([]);
+    const [habits,setHabits]=useState(null);
+    const [loading,setLoading]=useState(false);
 
     useEffect(()=>{
         let text=title[0].toUpperCase();
@@ -43,30 +46,62 @@ export default function TodayScreen(){
         const promise=axios.get("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/today",config);
 
         promise.then(res=>{
+            setLoading(false);
             setHabits([...res.data]);
             const numberOfSelected=res.data.filter(habit=>habit.done===true).length;
             progress.setPercentage(Math.round(numberOfSelected*100/(res.data.length)));
         });
 
-        promise.catch(err=>alert(err.response.data.message));
+        promise.catch(err=>{setLoading(false); return alert(err.response.data.message)});
     },[progress,userData.token]);
     
     useEffect(()=>{
         RenderTodayHabits()
     },[RenderTodayHabits,userData]);
     
+    function TodayScreenContent(){
+        if(habits===null){
+            return (
+                <Loading>
+                    <RotatingLines 
+                    width="200"
+                    height="200"
+                    strokeColor="#126BA5"
+                    animationDuration="1"
+                    />
+                </Loading>
+            )
+        }else{
+            return (
+                <Content>
+                    <h3>{title}</h3>
+                    <SubTitle percentage={progress.percentage}>
+                        {progress.percentage ===0 ? "Nenhum hábito concluído ainda" : `${progress.percentage}% dos hábitos concluídos`}
+                    </SubTitle>
+                    {loading ? 
+                        <Loading>
+                            <RotatingLines 
+                                width="200"
+                                height="200"
+                                strokeColor="#126BA5"
+                                animationDuration="1"
+                            />
+                        </Loading>
+                        :
+                        habits.map((habit,index)=>{
+                        return (<HabitToday key={index} RenderTodayHabits={RenderTodayHabits} habit={habit} id={habit.id}  setLoading={setLoading}/>);
+                    })}
+                </Content>
+            )
+        }
+    }
+
+    const renderPageTodayScreen=TodayScreenContent();
+
     return(
         <>
             <Header/>
-            <Content>
-                <h3>{title}</h3>
-                <SubTitle percentage={progress.percentage}>
-                    {progress.percentage ===0 ? "Nenhum hábito concluído ainda" : `${progress.percentage}% dos hábitos concluídos`}
-                </SubTitle>
-                {habits.map((habit,index)=>{
-                    return (<HabitToday key={index} RenderTodayHabits={RenderTodayHabits} habit={habit} id={habit.id}/>);
-                })}
-            </Content>
+            {renderPageTodayScreen}
             <Navbar/>
         </>
     )

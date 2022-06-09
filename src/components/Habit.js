@@ -1,3 +1,4 @@
+
 import styled from "styled-components";
 import DayBlock from "./DayBlock";
 import DayButton from "./DayButton";
@@ -5,6 +6,7 @@ import DayButton from "./DayButton";
 
 export default function Habit({children,selectedNewHabit,ChangeColor,isDisabled,isNewHabit,selected}){
     const arrayDays=["D","S","T","Q","Q","S","S"];
+  
     
     function RenderHabit(){
         if(isNewHabit){ 

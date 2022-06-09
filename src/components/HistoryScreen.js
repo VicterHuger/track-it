@@ -3,6 +3,7 @@ import{ useState, useEffect, useContext, useCallback } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import dayjs from "dayjs";
+import { RotatingLines } from 'react-loader-spinner';
 
 import calendarstyle from "../assets/styles/calendarstyle.css";
 import UserContext from '../contexts/UserContext';
@@ -10,6 +11,7 @@ import styled from "styled-components";
 import Header from "./Header";
 import Navbar from "./Navbar";
 import axios from 'axios';
+import Loading from '../assets/styles/Loading';
 
 export default function HistoryScreen(){
     window.scrollTo(1,0);
@@ -21,7 +23,7 @@ export default function HistoryScreen(){
     const [value, setValue] = useState(new Date());
     const [dailyHistory,setDailyHistory]=useState([]);
     const [calendarDayClicked,setCalendarDayClicked]=useState(null);
-    // const [nameOfIcon,setNameOfIcon]=useState('close-circle')
+    const [loading,setLoading]=useState(true);
    
     
     const getHistoricDaylyHabbits=useCallback(()=>{
@@ -31,8 +33,12 @@ export default function HistoryScreen(){
             },
         }
         axios.get("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/history/daily", config)
-            .then(res=>setDailyHistory([...res.data]))
-            .catch(err=>alert(err.response.data.message));
+            .then(res=>{
+                setLoading(false);
+                return setDailyHistory([...res.data])})
+            .catch(err=>{
+                setLoading(false);
+                return alert(err.response.data.message)});
     },[userData.token]);
 
     function createArrayHabitsAreCompleteds(){
@@ -89,7 +95,7 @@ export default function HistoryScreen(){
     function wasHabitDay(arrayDays,day2){
         return (arrayDays.find((dDate,index) => {
              if(index!==0) {
-                 return dDate.day===dayjs(day2).locale('pt-br').format('DD/MM/YYYY');
+                return dDate.day===dayjs(day2).locale('pt-br').format('DD/MM/YYYY');
              }
             return;
         }));
@@ -135,18 +141,29 @@ export default function HistoryScreen(){
         <>
             <Header/>
             <Content  calendarDayClicked={calendarDayClicked} wasHabitDay={wasHabitDay} dailyHistory={dailyHistory} >
-                <h3>Histórico</h3>
-                {/* <p>Em breve você poderá ver o histórico dos seus hábitos aqui!</p> */}
-                <div>
-                    <Calendar 
-                        onChange={(date)=>setValue(date)} 
-                        value={value} 
-                        defaultView="month" 
-                        locale='pt-br'
-                        tileClassName={tileClassName}
-                        onClickDay={(value) => setCalendarDayClicked(value)}
-                        />
-                </div>
+                {loading ? 
+                    <Loading>
+                         <RotatingLines 
+                            width="200"
+                            height="200"
+                            strokeColor="#126BA5"
+                            animationDuration="1"
+                          />
+                    </Loading>
+                :
+                <>
+                    <h3>Histórico</h3>
+                    <div>
+                        <Calendar 
+                            onChange={(date)=>setValue(date)} 
+                            value={value} 
+                            defaultView="month" 
+                            locale='pt-br'
+                            tileClassName={tileClassName}
+                            onClickDay={(value) => setCalendarDayClicked(value)}
+                            />
+                    </div>
+                </>}
             </Content>
             {renderClikedDayInfo}
             <Navbar/>
@@ -199,7 +216,6 @@ width:80%;
 min-height:300px;
 background-color:#ffffff;
 display:flex;
-/* justify-content:space-around; */
 flex-direction:column;
 padding:13px 4%;
 box-shadow: 0px 4px 4px 0px rgba(0,0,0,0.15);
