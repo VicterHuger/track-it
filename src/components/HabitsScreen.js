@@ -3,6 +3,8 @@ import axios from "axios";
 import styled from "styled-components";
 import { RotatingLines, ThreeDots } from "react-loader-spinner";
 
+import DayProgessContext from "../contexts/DayProgessContext";
+import SelectedHabits from "../contexts/SelectedHabits";
 import UserContext from "../contexts/UserContext";
 import Header from "./Header";
 import Navbar from "./Navbar";
@@ -18,6 +20,8 @@ export default function HabitsScreen(){
     window.scrollTo(1,0);
 
     const {userData}=useContext(UserContext);
+    const {progress}=useContext(DayProgessContext);
+    const {numberOfSelectedHabits}=useContext(SelectedHabits)
     const initialSelected=useMemo(()=>[false,false,false,false,false,false,false],[])
     const [habits,setHabits]=useState([]);
     const [habitName,setHabitName]=useState("");
@@ -26,7 +30,7 @@ export default function HabitsScreen(){
     const [isDisabledNewHabit,setIsDisabledNewHabit]=useState(false);
     const [isDisabled,setIsDisabled]=useState(false);
     const [newHabit,setNewHabit]=useState([]);
-    const [loading, setLoading]=useState(true);
+    const [loading, setLoading]=useState(true); 
 
 
     const RenderHabits=useCallback(()=>{
@@ -38,9 +42,9 @@ export default function HabitsScreen(){
         const promise=axios.get("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits", config);
 
         promise.then( (res)=>{
-            const mat=[];
+            const newArraySelected=[];
             if(res.data.length!==0){
-                const newArraySelected=[...selected];
+
                 setHabits([...res.data]);
                 res.data.forEach(habit=>{
                     const newSelected=[...initialSelected];
@@ -48,9 +52,9 @@ export default function HabitsScreen(){
                         newSelected[value]=true;
                     });
                     newArraySelected.push(newSelected);
-                    mat.push(newArraySelected);
                 });
-                setSelected(...mat);
+                setSelected(arraySelected=>[...arraySelected,...newArraySelected]);
+                
             }
             setLoading(false);    
             
@@ -72,6 +76,11 @@ export default function HabitsScreen(){
             };
             const promise=axios.delete(`https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${id}`,config);
             promise.then((res)=>{
+                if(res.data.length!==0){
+                    progress.setPercentage(Math.round(numberOfSelectedHabits.numberOfSelected*100/(res.data.length)));
+                }else{
+                    progress.setPercentage(0);
+                }
                 if(habits.length===1){
                     setHabits([]);
                 }
@@ -142,7 +151,6 @@ export default function HabitsScreen(){
         const promise=axios.post("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits",body,config);
 
         promise.then(res=>{
-            console.log(res.data);
             setHabitName("");
             setIsDisabled(false);
             setSelectedNewHabit(initialSelected);

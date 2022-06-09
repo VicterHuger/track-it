@@ -4,6 +4,7 @@ import styled from "styled-components";
 import dayjs from "dayjs";
 
 import DayProgessContext from "../contexts/DayProgessContext";
+import SelectedHabits from "../contexts/SelectedHabits";
 import UserContext from "../contexts/UserContext";
 import Header from "./Header";
 import Navbar from "./Navbar";
@@ -23,6 +24,7 @@ export default function TodayScreen(){
 
     const {progress}=useContext(DayProgessContext);
     const {userData}=useContext(UserContext);
+    const {numberOfSelectedHabits}=useContext(SelectedHabits);
 
     const[title,setTitle]=useState(dayjs().locale('pt-br').format('dddd, DD/MM'));
     const [habits,setHabits]=useState(null);
@@ -49,11 +51,15 @@ export default function TodayScreen(){
             setLoading(false);
             setHabits([...res.data]);
             const numberOfSelected=res.data.filter(habit=>habit.done===true).length;
-            progress.setPercentage(Math.round(numberOfSelected*100/(res.data.length)));
+            numberOfSelectedHabits.setNumberOfSelected(numberOfSelected);
+            if(res.data.length!==0){
+                progress.setPercentage(Math.round(numberOfSelected*100/(res.data.length)));
+            }
+            
         });
 
         promise.catch(err=>{setLoading(false); return alert(err.response.data.message)});
-    },[progress,userData.token]);
+    },[progress,userData.token,numberOfSelectedHabits]);
     
     useEffect(()=>{
         RenderTodayHabits()
@@ -73,12 +79,9 @@ export default function TodayScreen(){
             )
         }else{
             return (
-                <Content>
-                    <h3>{title}</h3>
-                    <SubTitle percentage={progress.percentage}>
-                        {progress.percentage ===0 ? "Nenhum hábito concluído ainda" : `${progress.percentage}% dos hábitos concluídos`}
-                    </SubTitle>
-                    {loading ? 
+               
+                    <>
+                        {loading ? 
                         <Loading>
                             <RotatingLines 
                                 width="200"
@@ -88,10 +91,18 @@ export default function TodayScreen(){
                             />
                         </Loading>
                         :
-                        habits.map((habit,index)=>{
+                        <Content>
+                        <h3>{title}</h3>
+                        <SubTitle percentage={progress.percentage}>
+                            {progress.percentage ===0 ? "Nenhum hábito concluído ainda" : `${progress.percentage}% dos hábitos concluídos`}
+                        </SubTitle>
+                        {habits.map((habit,index)=>{
                         return (<HabitToday key={index} RenderTodayHabits={RenderTodayHabits} habit={habit} id={habit.id}  setLoading={setLoading}/>);
-                    })}
-                </Content>
+                        })}
+                    </Content >
+                    }
+                    </>
+                
             )
         }
     }

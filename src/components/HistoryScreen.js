@@ -5,7 +5,6 @@ import 'react-calendar/dist/Calendar.css';
 import dayjs from "dayjs";
 import { RotatingLines } from 'react-loader-spinner';
 
-import calendarstyle from "../assets/styles/calendarstyle.css";
 import UserContext from '../contexts/UserContext';
 import styled from "styled-components";
 import Header from "./Header";
@@ -15,7 +14,7 @@ import Loading from '../assets/styles/Loading';
 
 export default function HistoryScreen(){
     window.scrollTo(1,0);
-
+    require('../assets/styles/calendarstyle.css')
     require('dayjs/locale/pt-br');
     dayjs().locale('pt-br');
 
@@ -46,7 +45,7 @@ export default function HistoryScreen(){
         dailyHistory.forEach((dDate,index)=>{
             let isDone=true;
             if(index!==0){
-                for(let i=0; i<dDate.habits.length;i++){
+                for(let i=0; i<dDate.habits.length; i++){
                     if(dDate.habits[i].done===false){
                         isDone=false;
                         break;
@@ -97,7 +96,7 @@ export default function HistoryScreen(){
              if(index!==0) {
                 return dDate.day===dayjs(day2).locale('pt-br').format('DD/MM/YYYY');
              }
-            return;
+            return "";
         }));
     }
 
@@ -110,7 +109,6 @@ export default function HistoryScreen(){
     }
     
     const clickedDay = (()=>{
-        
         if(calendarDayClicked && wasHabitDay(dailyHistory,calendarDayClicked)){
             const index=returnIndexDay(calendarDayClicked);
             return (
