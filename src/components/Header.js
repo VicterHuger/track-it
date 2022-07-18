@@ -2,14 +2,26 @@ import styled from "styled-components";
 import { useContext } from "react";
 
 import UserContext from "../contexts/UserContext";
+import { useNavigate } from "react-router-dom";
 
 export default function Header(){
     
-    const {userData}=useContext(UserContext);
+    const {userData,setUserData}=useContext(UserContext);
+    const navigate=useNavigate();
+
+    function cleanLocalStorage(){
+        localStorage.removeItem('user');
+        setUserData(null);
+        navigate('/');
+    }
+
     return(
     <Container>
         <h1>TrackIt</h1>
-        <img src={userData.image} alt="Foto do usuário no formato circular" />
+        <div>
+            <img src={userData.image} alt="Foto do usuário no formato circular" />
+            <ion-icon name="log-out-outline" onClick={cleanLocalStorage}></ion-icon>
+        </div>
     </Container>
     )
 }
@@ -31,9 +43,20 @@ h1{
     color:#FFFFFF;
     font-family: 'Playball', cursive;
 }
-img{
+div{
+    display:flex;
+    width:100px;
+    justify-content:space-between;
+    align-items:center;
+    >img{
     aspect-ratio:1;
     height:51px;
-    border-radius:50%;
+    border-radius:50%;  
+    }
+    >ion-icon{
+        font-size:40px;
+        color:#FFFFFF;
+        cursor: pointer;
+    }
 }
 `

@@ -1,10 +1,10 @@
 import styled from "styled-components";
 
-export default function Habits({children,length}){
+export default function Habits({children,length, addHabitClicked}){
     return (
         <Content >
             {children}
-            {length===0 ?
+            {(length===0 && !addHabitClicked )?
             <p> Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para começar a trackear!</p> : ""}  
         </Content>
       

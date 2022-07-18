@@ -12,6 +12,7 @@ import HabitsScreen from "./HabitsScreen";
 import GlobalStyle from "../assets/styles/globalStyles";
 
 
+
 export default function App(){
 
     const[percentage,setPercentage]=useState(0);
@@ -27,11 +28,18 @@ export default function App(){
         email: '',
         image: '',
         password: ''
-      });
+    });
 
     const [isDisabled,setIsDisabled]=useState(false);
+    
+    let initialData={};
 
-    const[userData,setUserData]=useState({});
+    const itemStorage=localStorage.getItem("user");
+            if(itemStorage!==null){
+                initialData=JSON.parse(itemStorage);      
+            }
+
+    const[userData,setUserData]=useState(initialData);
 
     function handleForm(e){
         setFormData({
@@ -61,7 +69,7 @@ export default function App(){
     return (
         <>
             <GlobalStyle/> 
-                <UserContext.Provider value={{userData}}>
+                <UserContext.Provider value={{userData,setUserData}}>
                     <DayProgessContext.Provider value={{progress}}>
                         <SelectedHabits.Provider value={{numberOfSelectedHabits}} >
                             <BrowserRouter>

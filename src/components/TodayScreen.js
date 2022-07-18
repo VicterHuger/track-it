@@ -55,6 +55,9 @@ export default function TodayScreen(){
             if(res.data.length!==0){
                 progress.setPercentage(Math.round(numberOfSelected*100/(res.data.length)));
             }
+            if(res.data.length===0){
+                progress.setPercentage(null);
+            }
             
         });
 
@@ -64,6 +67,18 @@ export default function TodayScreen(){
     useEffect(()=>{
         RenderTodayHabits()
     },[RenderTodayHabits,userData]);
+
+    function subTitleContent(){
+        if(!habits || habits.length===0){
+            return 'Nenhum hábito para concluir hoje!'
+        }else{
+            return progress.percentage ===0 ? "Nenhum hábito concluído ainda" : `${progress.percentage}% dos hábitos concluídos`;
+        }
+    }
+
+    const renderSubTitleContent=subTitleContent();
+        
+    
     
     function TodayScreenContent(){
         if(habits===null){
@@ -94,7 +109,7 @@ export default function TodayScreen(){
                         <Content>
                         <h3>{title}</h3>
                         <SubTitle percentage={progress.percentage}>
-                            {progress.percentage ===0 ? "Nenhum hábito concluído ainda" : `${progress.percentage}% dos hábitos concluídos`}
+                            {renderSubTitleContent}
                         </SubTitle>
                         {habits.map((habit,index)=>{
                         return (<HabitToday key={index} RenderTodayHabits={RenderTodayHabits} habit={habit} id={habit.id}  setLoading={setLoading}/>);

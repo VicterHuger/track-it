@@ -30,7 +30,8 @@ export default function HabitsScreen(){
     const [isDisabledNewHabit,setIsDisabledNewHabit]=useState(false);
     const [isDisabled,setIsDisabled]=useState(false);
     const [newHabit,setNewHabit]=useState([]);
-    const [loading, setLoading]=useState(true); 
+    const [loading, setLoading]=useState(true);
+    const [addHabitClicked,setAddHabitClicked]=useState(false); 
 
 
     const RenderHabits=useCallback(()=>{
@@ -122,7 +123,7 @@ export default function HabitsScreen(){
             return(
                 <Habit key={index} habitName={habitName} setHabitName={setHabitName} ChangeColor={ChangeColor} selectedNewHabit={selectedNewHabit} isDisabled={isDisabled} isNewHabit={true}>    
                     <InputNewHabit setHabitName={setHabitName} habitName={habitName} isDisabled={isDisabled}/>
-                    <ButtonCancel isDisabled={isDisabled} CancelHabit={CancelHabit}>Cancelar</ButtonCancel>
+                    <ButtonCancel isDisabled={isDisabled} CancelHabit={CancelHabit} setAddHabitClicked={setAddHabitClicked}>Cancelar</ButtonCancel>
                     <ButtonSave isDisabled={isDisabled} SaveHabit={SaveHabit} >{buttonContent()}</ButtonSave>
                 </Habit>)}); 
     } 
@@ -157,6 +158,7 @@ export default function HabitsScreen(){
             setIsDisabledNewHabit(false);
             setNewHabit([]);
             setSelected([]);
+            setAddHabitClicked(false);
             RenderHabits();
         })
 
@@ -187,9 +189,9 @@ export default function HabitsScreen(){
               <Content>
                 <TitleContent>
                     <h2>Meus hábitos</h2>
-                    <button onClick={()=>{setNewHabit([...newHabit,""]);setIsDisabledNewHabit(true)}} disabled={isDisabledNewHabit}>+</button>
+                    <button onClick={()=>{setNewHabit([...newHabit,""]);setIsDisabledNewHabit(true); setAddHabitClicked(true)}} disabled={isDisabledNewHabit} >+</button>
                 </TitleContent>  
-                <Habits length={habits.length}>
+                <Habits length={habits.length} addHabitClicked={addHabitClicked}>
                     {renderNewHabit}
                     {renderHabits}
                 </Habits>

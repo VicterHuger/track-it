@@ -8,7 +8,7 @@ const Button=styled.button`
     height:45px;
     font-size:21px;
     border:none;
-    margin-bottom:25px;
+    margin-bottom:10px;
     opacity:${props=>(props.isDisabled ? 0.7 : 1)};
     display:flex;
     align-items:center;

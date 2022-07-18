@@ -1,7 +1,7 @@
 import styled from "styled-components";
-export default function ButtonCancel({children,isDisabled,CancelHabit}){
+export default function ButtonCancel({children,isDisabled,CancelHabit,setAddHabitClicked}){
     return (
-        <Button isDisabled={isDisabled} disabled={isDisabled} onClick={()=>CancelHabit()}>
+        <Button isDisabled={isDisabled} disabled={isDisabled} onClick={()=>{CancelHabit(); setAddHabitClicked(false)}}>
             {children}
         </Button>
     );
