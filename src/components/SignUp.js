@@ -20,7 +20,7 @@ export default function SignUp({formData, setFormData, isDisabled, setIsDisabled
 
         if(!isImgLink(formData.image)){
             CleanInputs();
-            return alert("Insira um link de uma imagem válida!");
+            return setErrorMessage("Insira um link de uma imagem válida!");
         }
 
         const body={

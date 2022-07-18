@@ -13,7 +13,7 @@ export default function Forms({children,formData, submitFunction, isDisabled, ha
         if(isDisabled){
             return (<ThreeDots heigth={13} width={51} radius={50} color="#FFFFFF" />);
         }else{
-            return "Entrar";
+            return window.location.pathname==='/cadastro' ? "Cadastrar" : "Entrar";
         }
     }
 
