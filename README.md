@@ -8,6 +8,28 @@ A habits tracking app written in React that allows you to improve your disciplin
 
 Try it out: [Track It](https://track-it-flax.vercel.app/)!
 
+## Getting Started
+
+This website can be used in two different ways: by cloning the project or by using deployed version [Track It](https://track-it-flax.vercel.app/)
+
+To clone the project, run the following command:
+
+```git
+git clone https://github.com/VicterHuger/track-it.git
+```
+
+Navigate to the project folder and run the following command:
+
+```git
+npm install
+```
+
+Run the app locally 
+
+```git
+npm start
+```
+
 ## About
 
 - Sign Up: The user must sign up to keep his habits progression saved! To sign up, the user needs to write a valid email, an password of interest, an user name and a valid photo link to be used as an avatar image on pages applications! To acess this page, the user needs to click on "Não tem uma conta? Cadastre-se" on login page or add a url pathname "/cadastro" to domain URL. When the sign up be sucessfull, the user will be redirected to login page!
@@ -25,10 +47,4 @@ Try it out: [Track It](https://track-it-flax.vercel.app/)!
 ## Technologies
 
 <img align="left" alt="React" heigth="100px" src="https://badges.aleen42.com/src/react.svg" />
-
-</br>
-</br>
-
-## How to run
--On your directory, run git clone https://github.com/VicterHuger/track-it. When finished, with node process manager, use npm i to install all the necessary dependencies. 
 
